@@ -9,7 +9,7 @@ https://github.com/chrisoshea/ofxMidi
 
 Thanks to https://github.com/gmarco/qthesia for example of parsing jdksmidi messages
 
-Threading currently uses modified ofxRuiThread modified slightly to work with OF 007
+Threading currently uses ofxRuiThread modified slightly to work with OF 007
 
 NOTES/TO-DOS
 ofxRuiThread probably is not needed but has made threading much simpler for me
