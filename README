@@ -1,5 +1,8 @@
 Plays a midi file from disk in openFrameworks 007, example mostly prints to console, plays through port
 
+The example project has everything setup for XCode. You should be able to drop this into openFrameworks/apps/examples and start running
+
+
 THANKS/REFERENCES
 Uses jdksmidi awesome library to read and parse midi files
 https://github.com/jdkoftinoff/jdksmidi
