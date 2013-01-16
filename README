@@ -15,6 +15,7 @@ Thanks to https://github.com/gmarco/qthesia for example of parsing jdksmidi mess
 Threading currently uses ofxRuiThread modified slightly to work with OF 007
 
 NOTES/TO-DOS
+iOS users - please see issue 1: https://github.com/jvcleave/ofxThreadedMidiPlayer/issues/1
 ofxRuiThread probably is not needed but has made threading much simpler for me
 Incorporation of ofxMidi?
 Has not been tested with more than 1 port 
