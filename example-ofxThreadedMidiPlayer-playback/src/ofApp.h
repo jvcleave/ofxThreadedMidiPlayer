@@ -5,12 +5,14 @@
 #include "ofxThreadedMidiPlayer.h"
 
 
-class testApp : public ofBaseApp{
+class ofApp : public ofBaseApp{
 
 	public:
 		void setup();
 		void update();
 		void draw();
+    
+    void exit();
 
 		void keyPressed  (int key);
 		void keyReleased(int key);
@@ -22,5 +24,8 @@ class testApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 	
-	vector<ofxThreadedMidiPlayer *>threads;
-};
+    ofxThreadedMidiPlayer player;
+    
+    
+    void midiEvent(ofxMidiMessage& m);
+    };

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>768FA66B-94DB-49B6-B020-6D79C2EED0A8</string>
+	<key>IDESourceControlProjectName</key>
+	<string>example-ofxThreadedMidiPlayer-playback</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>8C4C6F40B92FB9BF6B911F36ED937FECD7CB225D</key>
+		<string>git://github.com/jvcleave/ofxThreadedMidiPlayer.git</string>
+		<key>90E2F969A762FB62C413A0C44D1F334E6EC3F531</key>
+		<string>https://github.com/danomatika/ofxMidi.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>example-ofxThreadedMidiPlayer-playback/example-ofxThreadedMidiPlayer-playback.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>8C4C6F40B92FB9BF6B911F36ED937FECD7CB225D</key>
+		<string>../../..</string>
+		<key>90E2F969A762FB62C413A0C44D1F334E6EC3F531</key>
+		<string>../../../../ofxMidi</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>git://github.com/jvcleave/ofxThreadedMidiPlayer.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>8C4C6F40B92FB9BF6B911F36ED937FECD7CB225D</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>90E2F969A762FB62C413A0C44D1F334E6EC3F531</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ofxMidi</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>8C4C6F40B92FB9BF6B911F36ED937FECD7CB225D</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ofxThreadedMidiPlayer</string>
+		</dict>
+	</array>
+</dict>
+</plist>
