@@ -16,25 +16,16 @@ The example project has everything setup for XCode.
 * added addon_config.mk file so it works nicely with OF's Project Generator
 
 
-
-######Originally developed by [Jason van Cleave](https://github.com/jvcleave/ofxThreadedMidiPlayer/)
-####Original Readme
 #####THANKS/REFERENCES
-Uses jdksmidi awesome library to read and parse midi files
+Uses jdksmidi awesome library to read and parse midi files    
 [https://github.com/jdkoftinoff/jdksmidi](https://github.com/jdkoftinoff/jdksmidi)
+
+Thanks to [https://github.com/gmarco/qthesia](https://github.com/gmarco/qthesia) for example of parsing jdksmidi messages   
+Nice writeup on setting up a virtual midi port on a Mac (works well with GarageBand)    
+http://fox-gieg.com/tutorials/2007/inter-application-midi/
 
 Uses RtMidi (included in ofxMidi) to send data to MIDI ports
 [https://github.com/chrisoshea/ofxMidi](https://github.com/chrisoshea/ofxMidi)
 
-Thanks to [https://github.com/gmarco/qthesia](https://github.com/gmarco/qthesia) for example of parsing jdksmidi messages
 
-Threading currently uses ofxRuiThread modified slightly to work with OF 007
-
-NOTES/TO-DOS
-iOS users - please see issue 1: https://github.com/jvcleave/ofxThreadedMidiPlayer/issues/1
-ofxRuiThread probably is not needed but has made threading much simpler for me
-Incorporation of ofxMidi?
-Has not been tested with more than 1 port 
-Nice writeup on setting up a virtual midi port on a Mac (works well with GarageBand)
-http://fox-gieg.com/tutorials/2007/inter-application-midi/
 
