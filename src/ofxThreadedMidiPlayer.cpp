@@ -29,8 +29,8 @@ ofxThreadedMidiPlayer::~ofxThreadedMidiPlayer(){
 void ofxThreadedMidiPlayer::stop(){
     cout << __PRETTY_FUNCTION__ << endl;
     stopThread();
-    waitForThread();
-    // clean();
+    waitForThread(false);
+    //clean();
     
 }
 void ofxThreadedMidiPlayer::DumpMIDITimedBigMessage( const MIDITimedBigMessage& msg )
@@ -125,7 +125,7 @@ void ofxThreadedMidiPlayer::threadedFunction(){
         MIDITimedBigMessage event;
         int eventTrack = 0;
         
-        for ( ; currentTime < max_time && isThreadRunning(); currentTime += 10. ){
+        for ( ; currentTime <= max_time && isThreadRunning(); currentTime += 10. ){
             // find all events that came before or a the current time
             while ( nextEventTime <= currentTime ){
                 myTime++;
@@ -136,9 +136,9 @@ void ofxThreadedMidiPlayer::threadedFunction(){
                 if(sequencer){
                     if ( sequencer->GetNextEvent ( &eventTrack, &event ) ){
                         
-                        //ofLog ( OF_LOG_VERBOSE,
-                         //      "currentTime=%06.0f : nextEventTime=%06.0f : eventTrack=%02d",
-                           //    currentTime, nextEventTime, eventTrack );
+//                        ofLog ( OF_LOG_VERBOSE,
+//                              "currentTime=%06.0f : nextEventTime=%06.0f : eventTrack=%02d",
+//                              currentTime, nextEventTime, eventTrack );
                         MIDITimedBigMessage *msg=&event;
                         if (msg->GetLength() > 0)
                         {
@@ -167,6 +167,12 @@ void ofxThreadedMidiPlayer::threadedFunction(){
         
         if(doLoop)
         {
+             ofLogVerbose("isLooped: YES");
+             //ofNotifyEvent(midiEvent, midiMessage, this);
+             //midiOut.sendNoteOn(channel, note,  velocity);
+             //ofxMidiOut::sendControlChange(int channel, int control, int value) {
+             clean();
+             init();
             isReady = true;
         }else {
             
@@ -234,8 +240,22 @@ void ofxThreadedMidiPlayer::init(){
         midiout=new RtMidiOut();
         if (midiout->getPortCount()){
             midiout->openPort(midiPort);
-            ofLogVerbose("Using Port name: " ,   ofToString(midiout->getPortName(0)) );
-            //std::cout << "Using Port name: \"" << midiout->getPortName(0)<< "\"" << std::endl;
+            ofLogVerbose("Total ports: " ,   ofToString(midiout->getPortCount()) );
+//            // Check inputs.
+//            unsigned int nPorts = midiout->getPortCount();
+//            std::string portName;
+//            for ( unsigned int i=0; i<nPorts; i++ ) {
+//              try {
+//                portName = midiout->getPortName(i);
+//              }
+//              catch ( RtMidiError &error ) {
+//                error.printMessage();
+//              }
+//              //ofLogVerbose("Using Port name: " ,   ofToString(portName) );
+//              std::cout << "  Input Port #" << i+1 << ": " << portName << '\n';
+//            }
+            ofLogVerbose("Using Port name: " ,   ofToString(midiout->getPortName(midiPort)) );
+
         }
         
         currentTime = 0.0;
