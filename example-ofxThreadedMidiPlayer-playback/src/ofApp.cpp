@@ -25,7 +25,8 @@ void ofApp::update(){
 }
 //--------------------------------------------------------------
 void ofApp::midiEvent(ofxMidiMessage& m){
-
+    // ofLog << " Evento Midi" << m.status << '\n';
+    // ofLog << "midiMessage status: " <<  ofxMidiMessage::getStatusString(m.status) <<  '\n';
     
 }
 //--------------------------------------------------------------
@@ -43,6 +44,9 @@ void ofApp::keyReleased(int key){
         player.start();
     }else if (key == 's'){
         player.stop();
+    }
+    else if (key == 'd'){
+            player.clean();
     }
 }
 

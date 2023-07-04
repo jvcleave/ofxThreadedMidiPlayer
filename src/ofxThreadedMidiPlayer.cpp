@@ -29,8 +29,8 @@ ofxThreadedMidiPlayer::~ofxThreadedMidiPlayer(){
 void ofxThreadedMidiPlayer::stop(){
     cout << __PRETTY_FUNCTION__ << endl;
     stopThread();
-    waitForThread();
-    // clean();
+    waitForThread(false);
+    //clean();
     
 }
 void ofxThreadedMidiPlayer::DumpMIDITimedBigMessage( const MIDITimedBigMessage& msg )
@@ -116,57 +116,80 @@ void ofxThreadedMidiPlayer::dispatchMidiEvent( float currentTime, float timeDelt
 }
 void ofxThreadedMidiPlayer::threadedFunction(){
     while(isThreadRunning()){
-        
+
         init();
-        
+
         myTime = 0;
-        
-        
+
         MIDITimedBigMessage event;
         int eventTrack = 0;
-        
+
+        initTime = ofGetElapsedTimeMillis();
+
         for ( ; currentTime < max_time && isThreadRunning(); currentTime += 10. ){
             // find all events that came before or a the current time
-            while ( nextEventTime <= currentTime ){
-                myTime++;
-                if (myTime <currentTime){
-                    sleep(1);
-                    continue;
-                }
-                if(sequencer){
-                    if ( sequencer->GetNextEvent ( &eventTrack, &event ) ){
-                        
-                        //ofLog ( OF_LOG_VERBOSE,
-                         //      "currentTime=%06.0f : nextEventTime=%06.0f : eventTrack=%02d",
-                           //    currentTime, nextEventTime, eventTrack );
-                        MIDITimedBigMessage *msg=&event;
-                        if (msg->GetLength() > 0)
-                        {
-                            vector<unsigned char> message;
-                            message.push_back(msg->GetStatus());
-                            if (msg->GetLength()>0) message.push_back(msg->GetByte1());
-                            if (msg->GetLength()>1) message.push_back(msg->GetByte2());
-                            if (msg->GetLength()>2) message.push_back(msg->GetByte3());
-                            if (msg->GetLength()>3) message.push_back(msg->GetByte4());
-                            if (msg->GetLength()>4) message.push_back(msg->GetByte5());
-                            message.resize(msg->GetLength());
-                            midiout->sendMessage(&message);
-                            
-                            dispatchMidiEvent(currentTime, currentTime - nextEventTime,message);
-                            
-                            DumpMIDITimedBigMessage ( event );
-                        }
-                        if ( !sequencer->GetNextEventTimeMs ( &nextEventTime ) ){
-                            ofLogVerbose("NO MORE EVENTS FOR SEQUENCE, LAST TIME CHECKED IS: " ,   ofToString(nextEventTime) );
+            //ofLog() << "FOR-------------------------------------------------------";
+           while ( nextEventTime <= currentTime ){
+               //ofLog() << "WHILE-------------------------------------------------------";
+                myTime = ofGetElapsedTimeMillis() - initTime;
+                //ofLog() << currentTime << "\t check: " << ofGetElapsedTimeMillis()-prevTime << "\t elaps: " << ofGetElapsedTimeMillis();
+                if (myTime < currentTime){
+                usleep(100);
+                } else {
+
+
+                    if(sequencer){
+                        if ( sequencer->GetNextEvent ( &eventTrack, &event ) ){
+
+//                            ofLog ( OF_LOG_VERBOSE,
+//                                  "currentTime=%06.0f : nextEventTime=%06.0f : OFtime=%02d",
+//                                  currentTime, nextEventTime, ofGetElapsedTimeMillis() );
+                            MIDITimedBigMessage *msg=&event;
+                            if (msg->GetLength() > 0)
+                            {
+                                vector<unsigned char> message;
+                                message.push_back(msg->GetStatus());
+                                if (msg->GetLength()>0) message.push_back(msg->GetByte1());
+                                if (msg->GetLength()>1) message.push_back(msg->GetByte2());
+                                if (msg->GetLength()>2) message.push_back(msg->GetByte3());
+                                if (msg->GetLength()>3) message.push_back(msg->GetByte4());
+                                if (msg->GetLength()>4) message.push_back(msg->GetByte5());
+                                message.resize(msg->GetLength());
+                                midiout->sendMessage(&message);
+
+                                dispatchMidiEvent(currentTime, currentTime - nextEventTime,message);
+
+                                DumpMIDITimedBigMessage ( event );
+                            }
+                            if ( !sequencer->GetNextEventTimeMs ( &nextEventTime ) ){
+                                ofLogVerbose("NO MORE EVENTS FOR SEQUENCE, LAST TIME CHECKED IS: " ,   ofToString(nextEventTime) );
+                                //Workaround for loop
+                                //clean();
+                                //init();
+                               //isReady = true;
+                                //return;
+                            }
                         }
                     }
                 }
+
+
+
+
+
+
+
             }
         }
+
         count++;
+
         
         if(doLoop)
         {
+             ofLogVerbose("isLooped: YES");
+             clean();
+             init();
             isReady = true;
         }else {
             
@@ -234,8 +257,22 @@ void ofxThreadedMidiPlayer::init(){
         midiout=new RtMidiOut();
         if (midiout->getPortCount()){
             midiout->openPort(midiPort);
-            ofLogVerbose("Using Port name: " ,   ofToString(midiout->getPortName(0)) );
-            //std::cout << "Using Port name: \"" << midiout->getPortName(0)<< "\"" << std::endl;
+            ofLogVerbose("Total ports: " ,   ofToString(midiout->getPortCount()) );
+//            // Check inputs.
+//            unsigned int nPorts = midiout->getPortCount();
+//            std::string portName;
+//            for ( unsigned int i=0; i<nPorts; i++ ) {
+//              try {
+//                portName = midiout->getPortName(i);
+//              }
+//              catch ( RtMidiError &error ) {
+//                error.printMessage();
+//              }
+//              //ofLogVerbose("Using Port name: " ,   ofToString(portName) );
+//              std::cout << "  Input Port #" << i+1 << ": " << portName << '\n';
+//            }
+            ofLogVerbose("Using Port name: " ,   ofToString(midiout->getPortName(midiPort)) );
+
         }
         
         currentTime = 0.0;
@@ -251,3 +288,33 @@ void ofxThreadedMidiPlayer::init(){
     }
 }
 
+float ofxThreadedMidiPlayer::getBpm(){
+        float bpm = -1.0f;
+        if(sequencer){
+            MIDISequencerState *state = sequencer->GetState();
+            if(state)
+            for(size_t i=0; i<state->num_tracks; i++){
+                if(state->track_state[i]){
+                    bpm = state->track_state[i]->tempobpm;
+                    //cout << " tempo " << i << " "<< bpm << endl;
+                }
+            }
+        }
+        return bpm;
+    }
+
+bool ofxThreadedMidiPlayer::setBpm(float bpm){
+        if(!sequencer){
+            return false;
+        }
+
+        MIDISequencerState *state = sequencer->GetState();
+        if(state)
+        for(size_t i=0; i<state->num_tracks; i++){
+            if(state->track_state[i]){
+                state->track_state[i]->tempobpm = bpm;
+                //cout << " tempo " << i << " "<< bpm << endl;
+            }
+        }
+        return true;
+ }

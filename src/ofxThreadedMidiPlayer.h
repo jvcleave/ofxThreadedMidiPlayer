@@ -29,6 +29,7 @@ public:
     double musicDurationInSeconds;
     float max_time;
     long myTime;
+    long initTime;
     bool doLoop;
     
     MIDIMultiTrack *tracks;
@@ -47,8 +48,11 @@ public:
     void setup(string fileName, int portNumber, bool shouldLoop = true);
     void threadedFunction();
     void clean();
+    float getBpm();
+    bool setBpm(float bpm);
     
     ofxMidiEvent midiEvent;
+
     
 protected:
     void dispatchMidiEvent(float currentTime, float timeDelta, vector<unsigned char>& message);
